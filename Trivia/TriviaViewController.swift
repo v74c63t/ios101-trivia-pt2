@@ -109,6 +109,7 @@ class TriviaViewController: UIViewController {
           self.showFinalScore()
           return
       }
+      sleep(1/4)
       answerController.dismiss(animated: false){
           self.answerButton0.isHidden = true
           self.answerButton1.isHidden = true
