@@ -21,11 +21,16 @@ class TriviaViewController: UIViewController {
   private var questions = [TriviaQuestion]()
   private var currQuestionIndex = 0
   private var numCorrectQuestions = 0
+    private var answerController:UIAlertController!
+    
   
   override func viewDidLoad() {
     super.viewDidLoad()
     addGradient()
     questionContainerView.layer.cornerRadius = 8.0
+      answerButton1.isHidden = true
+      answerButton2.isHidden = true
+      answerButton3.isHidden = true
     // TODO: FETCH TRIVIA QUESTIONS HERE
     fetchData()
   }
@@ -81,14 +86,27 @@ class TriviaViewController: UIViewController {
   }
   
   private func updateToNextQuestion(answer: String) {
-    if isCorrectAnswer(answer) {
-      numCorrectQuestions += 1
-    }
-    currQuestionIndex += 1
-    guard currQuestionIndex < questions.count else {
-      showFinalScore()
-      return
-    }
+      var title=""
+      var message=""
+      if isCorrectAnswer(answer) {
+        numCorrectQuestions += 1
+        title = "Correct!"
+        message = "You got the question correct!"
+      }
+      else{
+          title = "Wrong"
+          message = "You got the question wrong"
+      }
+      answerController = UIAlertController(title: title,
+                                              message: message,
+                                              preferredStyle: .alert)
+      present(answerController, animated: true, completion: nil)
+      answerController.dismiss(animated: false)
+      currQuestionIndex += 1
+      guard self.currQuestionIndex < self.questions.count else {
+          self.showFinalScore()
+          return
+      }
     answerButton1.isHidden = true
     answerButton2.isHidden = true
     answerButton3.isHidden = true
@@ -100,17 +118,21 @@ class TriviaViewController: UIViewController {
   }
   
   private func showFinalScore() {
-    let alertController = UIAlertController(title: "Game over!",
-                                            message: "Final score: \(numCorrectQuestions)/\(questions.count)",
-                                            preferredStyle: .alert)
-    let resetAction = UIAlertAction(title: "Restart", style: .default) { [unowned self] _ in
-      currQuestionIndex = 0
-      numCorrectQuestions = 0
-      fetchData()
-      // updateQuestion(withQuestionIndex: currQuestionIndex)
-    }
-    alertController.addAction(resetAction)
-    present(alertController, animated: true, completion: nil)
+      answerController.dismiss(animated: false){
+          sleep(1/4)
+          let alertController = UIAlertController(title: "Game over!",
+                                                  message: "Final score: \(self.numCorrectQuestions)/\(self.questions.count)",
+                                                  preferredStyle: .alert)
+          let resetAction = UIAlertAction(title: "Restart", style: .default) { [unowned self] _ in
+              currQuestionIndex = 0
+              numCorrectQuestions = 0
+              fetchData()
+              // updateQuestion(withQuestionIndex: currQuestionIndex)
+          }
+          alertController.addAction(resetAction)
+          self.present(alertController, animated: true, completion: nil)
+          
+      }
   }
   
   private func addGradient() {
