@@ -29,6 +29,21 @@ class TriviaViewController: UIViewController {
     // TODO: FETCH TRIVIA QUESTIONS HERE
     fetchData()
   }
+    private func unescapeText(str:String) -> String {
+        guard let utf = str.data(using: .utf8) else{return str}
+        guard let attributedString = try? NSAttributedString(
+          data: utf,
+          options: [
+            .documentType: NSAttributedString.DocumentType.html,
+            .characterEncoding: String.Encoding.utf8.rawValue
+          ],
+          documentAttributes: nil
+        )
+        else {
+          return str
+        }
+        return attributedString.string
+    }
     private func fetchData(){
         TriviaQuestionService.fetchQuestions(amount:5) { questions in
             
@@ -45,22 +60,22 @@ class TriviaViewController: UIViewController {
     currentQuestionNumberLabel.text = "Question: \(questionIndex + 1)/\(questions.count)"
       
     let question = questions[questionIndex]
-    questionLabel.text = question.question
-    categoryLabel.text = question.category
+      questionLabel.text = unescapeText(str: question.question)
+      categoryLabel.text = unescapeText(str:question.category)
     let answers = ([question.correctAnswer] + question.incorrectAnswers).shuffled()
     if answers.count > 0 {
-      answerButton0.setTitle(answers[0], for: .normal)
+        answerButton0.setTitle(unescapeText(str:answers[0]), for: .normal)
     }
     if answers.count > 1 {
-      answerButton1.setTitle(answers[1], for: .normal)
+        answerButton1.setTitle(unescapeText(str:answers[1]), for: .normal)
       answerButton1.isHidden = false
     }
     if answers.count > 2 {
-      answerButton2.setTitle(answers[2], for: .normal)
+        answerButton2.setTitle(unescapeText(str:answers[2]), for: .normal)
       answerButton2.isHidden = false
     }
     if answers.count > 3 {
-      answerButton3.setTitle(answers[3], for: .normal)
+        answerButton3.setTitle(unescapeText(str:answers[3]), for: .normal)
       answerButton3.isHidden = false
     }
   }
