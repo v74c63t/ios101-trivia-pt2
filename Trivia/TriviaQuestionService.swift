@@ -26,7 +26,7 @@ class TriviaQuestionService{
                 return
               }
               // at this point, `data` contains the data received from the response
-                let questions = parse(data: data)
+            let questions = parse(data: data)
               // this response will be used to change the UI, so it must happen on the main thread
                 DispatchQueue.main.async {
                 completion?(questions) // call the completion closure and pass in the forecast data model
@@ -35,6 +35,16 @@ class TriviaQuestionService{
             task.resume() // resume the task and fire the request
     }
     private static func parse(data: Data) ->[TriviaQuestion] {
-        return []
+        var triviaQuestions = [TriviaQuestion]()
+        let jsonDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+        let questions = jsonDictionary["results"] as! [AnyObject]
+        for q in questions {
+            let category = q["category"] as! String
+            let question = q["question"] as! String
+            let correctAnswer = q["correct_answer"] as! String
+            let incorrectAnswers = q["incorrect_answers"] as! [String]
+            triviaQuestions.append(TriviaQuestion(category: category, question: question, correctAnswer: correctAnswer, incorrectAnswers: incorrectAnswers))
+        }
+        return triviaQuestions
     }
 }
