@@ -2,7 +2,7 @@
 
 Submitted by: **Vanessa Tang**
 
-**Trivia** is an app that ... [TODO] 
+**Trivia** is an app that shows the users a set of questions obtained from the OpenTriviaDB API that can be answered in succession. It keeps track of the amount of questions left and the current question the user is on. After an user answers a question, it will display an alert briefly to show them if they answered the question correctly or not before moving on to the next question. When all the questions are answered, it will display to the users the amount of questions they answered correctly out of all the questions. Lastly, the user has an option to restart and a new set of questions will be obtained from the API
 
 Time spent: **X** hours spent in total so far: 7-8 hrs?
 
