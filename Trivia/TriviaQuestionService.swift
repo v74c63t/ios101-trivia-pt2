@@ -6,6 +6,21 @@
 //
 
 import Foundation
+private func unescapeText(str:String) -> String {
+    guard let utf = str.data(using: .utf8) else{return str}
+    guard let attributedString = try? NSAttributedString(
+      data: utf,
+      options: [
+        .documentType: NSAttributedString.DocumentType.html,
+        .characterEncoding: String.Encoding.utf8.rawValue
+      ],
+      documentAttributes: nil
+    )
+    else {
+      return str
+    }
+    return attributedString.string
+}
 class TriviaQuestionService{
     static func fetchQuestions(amount: Int, category: Int? = nil, difficulty: String? = nil, type: String? = nil, completion: (([TriviaQuestion]) -> Void)? = nil){
         let base = "https://opentdb.com/api.php?"
@@ -49,13 +64,16 @@ class TriviaQuestionService{
         let jsonDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         let questions = jsonDictionary["results"] as! [AnyObject]
         for q in questions {
-            let category = q["category"] as! String
-            let question = q["question"] as! String
-            let correctAnswer = q["correct_answer"] as! String
-            let incorrectAnswers = q["incorrect_answers"] as! [String]
+            let category = unescapeText(str: q["category"] as! String)
+            let question = unescapeText(str: (q["question"] as! String))
+            let correctAnswer = unescapeText(str: q["correct_answer"] as! String)
+            var incorrectAnswers = [String]()
+            for incorrectAnswer in q ["incorrect_answers"] as! [String]{
+                incorrectAnswers.append(unescapeText(str: incorrectAnswer))
+            }
+
             triviaQuestions.append(TriviaQuestion(category: category, question: question, correctAnswer: correctAnswer, incorrectAnswers: incorrectAnswers))
         }
         return triviaQuestions
     }
-
 }
