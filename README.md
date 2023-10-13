@@ -2,7 +2,7 @@
 
 Submitted by: **Vanessa Tang**
 
-**Trivia** of your app** is an app that ... [TODO] 
+**Trivia** is an app that ... [TODO] 
 
 Time spent: **X** hours spent in total so far: 6-7 hrs?
 
