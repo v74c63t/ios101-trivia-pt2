@@ -4,7 +4,7 @@ Submitted by: **Vanessa Tang**
 
 **Trivia** is an app that ... [TODO] 
 
-Time spent: **X** hours spent in total so far: 6-7 hrs?
+Time spent: **X** hours spent in total so far: 7-8 hrs?
 
 ## Required Features
 
