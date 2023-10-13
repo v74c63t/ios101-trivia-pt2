@@ -127,6 +127,9 @@ class TriviaViewController: UIViewController {
           let resetAction = UIAlertAction(title: "Restart", style: .default) { [unowned self] _ in
               currQuestionIndex = 0
               numCorrectQuestions = 0
+              answerButton1.isHidden = true
+              answerButton2.isHidden = true
+              answerButton3.isHidden = true
               fetchData()
               // updateQuestion(withQuestionIndex: currQuestionIndex)
           }
