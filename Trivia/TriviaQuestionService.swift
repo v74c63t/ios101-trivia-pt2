@@ -6,25 +6,11 @@
 //
 
 import Foundation
-//private func unescapeText(str:String) -> String {
-//    guard let utf = str.data(using: .utf8) else{return str}
-//    guard let attributedString = try? NSAttributedString(
-//      data: utf,
-//      options: [
-//        .documentType: NSAttributedString.DocumentType.html,
-//        .characterEncoding: String.Encoding.utf8.rawValue
-//      ],
-//      documentAttributes: nil
-//    )
-//    else {
-//      return str
-//    }
-//    return attributedString.string
-//}
+
 class TriviaQuestionService{
-    static func fetchQuestions(amount: Int, category: Int? = nil, difficulty: String? = nil, type: String? = nil, completion: (([TriviaQuestion]) -> Void)? = nil){
+    static func fetchQuestions(amount: Int, completion: (([TriviaQuestion]) -> Void)? = nil){
         let base = "https://opentdb.com/api.php?"
-        var params = "amount=\(amount)"
+        let params = "amount=\(amount)"
         let url = URL(string: base+params)!
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
               // this closure is fired when the response is received
@@ -40,18 +26,18 @@ class TriviaQuestionService{
                 assertionFailure("Invalid response status code: \(httpResponse.statusCode)")
                 return
               }
-              // at this point, `data` contains the data received from the response
+
             let questions = parse(data: data)
             DispatchQueue.main.async {
-            completion?(questions) // call the completion closure and pass in the forecast data model
+            completion?(questions)
           }
             let decoder = JSONDecoder()
             let response = try! decoder.decode(TriviaAPIResponse.self, from: data)
             DispatchQueue.main.async {
                 completion?(response.results)
             }
-              // this response will be used to change the UI, so it must happen on the main thread
-            }
+
+        }
             task.resume() // resume the task and fire the request
     }
     private static func parse(data: Data) ->[TriviaQuestion] {
@@ -63,10 +49,6 @@ class TriviaQuestionService{
             let question =  (q["question"] as! String)
             let correctAnswer =  q["correct_answer"] as! String
             let incorrectAnswers = q["incorrect_answers"] as! [String]
-//            var incorrectAnswers = [String]()
-//            for incorrectAnswer in q ["incorrect_answers"] as! [String]{
-//                incorrectAnswers.append(unescapeText(str: incorrectAnswer))
-//            }
 
             triviaQuestions.append(TriviaQuestion(category: category, question: question, correctAnswer: correctAnswer, incorrectAnswers: incorrectAnswers))
         }

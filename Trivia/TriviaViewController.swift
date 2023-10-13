@@ -28,9 +28,6 @@ class TriviaViewController: UIViewController {
     super.viewDidLoad()
     addGradient()
     questionContainerView.layer.cornerRadius = 8.0
-      answerButton1.isHidden = true
-      answerButton2.isHidden = true
-      answerButton3.isHidden = true
     // TODO: FETCH TRIVIA QUESTIONS HERE
     fetchData()
   }
@@ -53,12 +50,16 @@ class TriviaViewController: UIViewController {
         TriviaQuestionService.fetchQuestions(amount:5) { questions in
             
             self.configure(withQuestions: questions)
-            self.updateQuestion(withQuestionIndex: 0)
             }
     }
     
     private func configure(withQuestions triviaQuestions: [TriviaQuestion]){
         questions = triviaQuestions
+        answerButton0.isHidden = true
+        answerButton1.isHidden = true
+        answerButton2.isHidden = true
+        answerButton3.isHidden = true
+        self.updateQuestion(withQuestionIndex: 0)
     }
   
   private func updateQuestion(withQuestionIndex questionIndex: Int) {
@@ -70,6 +71,7 @@ class TriviaViewController: UIViewController {
     let answers = ([question.correctAnswer] + question.incorrectAnswers).shuffled()
     if answers.count > 0 {
         answerButton0.setTitle(unescapeText(str:answers[0]), for: .normal)
+        answerButton0.isHidden = false
     }
     if answers.count > 1 {
         answerButton1.setTitle(unescapeText(str:answers[1]), for: .normal)
@@ -86,8 +88,8 @@ class TriviaViewController: UIViewController {
   }
   
   private func updateToNextQuestion(answer: String) {
-      var title=""
-      var message=""
+      var title = ""
+      var message = ""
       if isCorrectAnswer(answer) {
         numCorrectQuestions += 1
         title = "Correct!"
@@ -102,16 +104,18 @@ class TriviaViewController: UIViewController {
                                               message: message,
                                               preferredStyle: .alert)
       present(answerController, animated: true, completion: nil)
-      answerController.dismiss(animated: false)
       currQuestionIndex += 1
       guard self.currQuestionIndex < self.questions.count else {
           self.showFinalScore()
           return
       }
-    answerButton1.isHidden = true
-    answerButton2.isHidden = true
-    answerButton3.isHidden = true
-    updateQuestion(withQuestionIndex: currQuestionIndex)
+      answerController.dismiss(animated: false){
+          self.answerButton0.isHidden = true
+          self.answerButton1.isHidden = true
+          self.answerButton2.isHidden = true
+          self.answerButton3.isHidden = true
+          self.updateQuestion(withQuestionIndex: self.currQuestionIndex)
+      }
   }
   
   private func isCorrectAnswer(_ answer: String) -> Bool {
@@ -127,11 +131,7 @@ class TriviaViewController: UIViewController {
           let resetAction = UIAlertAction(title: "Restart", style: .default) { [unowned self] _ in
               currQuestionIndex = 0
               numCorrectQuestions = 0
-              answerButton1.isHidden = true
-              answerButton2.isHidden = true
-              answerButton3.isHidden = true
               fetchData()
-              // updateQuestion(withQuestionIndex: currQuestionIndex)
           }
           alertController.addAction(resetAction)
           self.present(alertController, animated: true, completion: nil)
