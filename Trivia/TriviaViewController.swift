@@ -94,8 +94,9 @@ class TriviaViewController: UIViewController {
         message = "You got the question correct!"
       }
       else{
-          title = "Wrong"
-          message = "You got the question wrong"
+          title = "Wrong."
+          message = "You got the question wrong."
+          
       }
       answerController = UIAlertController(title: title,
                                               message: message,
