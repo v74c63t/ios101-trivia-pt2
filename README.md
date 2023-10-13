@@ -4,7 +4,7 @@ Submitted by: **Vanessa Tang**
 
 **Trivia** is an app that shows the users a set of questions obtained from the OpenTriviaDB API that can be answered in succession. It keeps track of the amount of questions left and the current question the user is on. After an user answers a question, it will display an alert briefly to show them if they answered the question correctly or not before moving on to the next question. When all the questions are answered, it will display to the users the amount of questions they answered correctly out of all the questions. Lastly, the user has an option to restart and a new set of questions will be obtained from the API
 
-Time spent: **X** hours spent in total so far: 7-8 hrs?
+Time spent: **9** hours spent in total
 
 ## Required Features
 
@@ -29,13 +29,16 @@ The following **additional** features are implemented:
 
 ## Video Walkthrough
 
-Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove this reminder once you upload your README. 
+<!--Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove this reminder once you upload your README. 
 
-[Guide]](https://www.youtube.com/watch?v=GA92eKlYio4) .
+[Guide]](https://www.youtube.com/watch?v=GA92eKlYio4) .-->
+<img src='walkthrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ## Notes
 
 Describe any challenges encountered while building the app.
+
+- I had issues with decoding some of the data returned from the API. It took me a while to figure out how to fix the unescaped characters/unicode errors in the text.
 
 ## License
 
